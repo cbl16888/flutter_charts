@@ -76,7 +76,8 @@ class ChartCanvas implements common.ChartCanvas {
       common.Color stroke,
       bool roundEndCaps,
       double strokeWidthPx,
-      List<int> dashPattern}) {
+      List<int> dashPattern,
+      ui.Shader shader}) {
     _linePainter ??= new LinePainter();
     _linePainter.draw(
         canvas: canvas,
@@ -87,7 +88,8 @@ class ChartCanvas implements common.ChartCanvas {
         stroke: stroke,
         roundEndCaps: roundEndCaps,
         strokeWidthPx: strokeWidthPx,
-        dashPattern: dashPattern);
+        dashPattern: dashPattern,
+        shader: shader);
   }
 
   @override

@@ -48,10 +48,18 @@ class SimpleTimeSeriesChart extends StatelessWidget {
     final random = new Random();
 
     final data = [
-      new TimeSeriesSales(new DateTime(2017, 9, 19), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 19), 100),
       new TimeSeriesSales(new DateTime(2017, 9, 26), random.nextInt(100)),
       new TimeSeriesSales(new DateTime(2017, 10, 3), random.nextInt(100)),
       new TimeSeriesSales(new DateTime(2017, 10, 10), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 11, 19), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 12, 26), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2018, 1, 3), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2018, 3, 10), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2018, 5, 19), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2018, 8, 26), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2018, 11, 3), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2019, 1, 10), 0),
     ];
 
     return [
@@ -75,6 +83,13 @@ class SimpleTimeSeriesChart extends StatelessWidget {
       // should create the same type of [DateTime] as the data provided. If none
       // specified, the default creates local date time.
       dateTimeFactory: const charts.LocalDateTimeFactory(),
+      defaultRenderer: new charts.LineRendererConfig(
+        gradientColor: [
+          Color(0xFF35E03F),
+          Color(0xFFFEF201),
+          Color(0xFFFC000D)],
+        colorStops: [0.0, 0.5, 1]
+      ),
     );
   }
 

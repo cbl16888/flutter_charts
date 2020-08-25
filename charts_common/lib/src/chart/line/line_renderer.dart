@@ -15,6 +15,7 @@
 
 import 'dart:collection' show LinkedHashMap;
 import 'dart:math' show Rectangle, Point;
+import 'dart:ui' as ui show Gradient, Offset;
 
 import 'package:meta/meta.dart' show required, visibleForTesting;
 
@@ -983,7 +984,8 @@ class LineRenderer<D> extends BaseCartesianRenderer<D> {
                 points: line.points,
                 stroke: line.color,
                 strokeWidthPx: line.strokeWidthPx,
-                roundEndCaps: line.roundEndCaps);
+                roundEndCaps: line.roundEndCaps,
+                shader: config.gradientColor == null ? null : ui.Gradient.linear(ui.Offset(0, 0), ui.Offset(0, _chart.chartHeight * 1.0), config.gradientColor,config.colorStops));
           }
         });
       }

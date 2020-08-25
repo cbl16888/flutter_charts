@@ -14,6 +14,7 @@
 // limitations under the License.
 
 import 'dart:math' show Point, Rectangle;
+import 'dart:ui' as ui show Shader;
 
 import '../../common/color.dart' show Color;
 import '../../common/graphics_factory.dart' show GraphicsFactory;
@@ -59,7 +60,8 @@ abstract class ChartCanvas {
       Color stroke,
       bool roundEndCaps,
       double strokeWidthPx,
-      List<int> dashPattern});
+      List<int> dashPattern,
+      ui.Shader shader});
 
   /// Renders a pie, with an optional hole in the center.
   void drawPie(CanvasPie canvasPie);

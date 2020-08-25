@@ -71,6 +71,13 @@ class SimpleBarChart extends StatelessWidget {
     return new charts.BarChart(
       seriesList,
       animate: animate,
+      defaultRenderer: new charts.BarRendererConfig(
+          gradientColor: [
+            Color(0xFF35E03F),
+            Color(0xFFFEF201),
+            Color(0xFFFC000D)],
+          colorStops: [0.0, 0.5, 1]
+      ),
     );
   }
 

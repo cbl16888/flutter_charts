@@ -18,6 +18,7 @@ import '../common/series_renderer_config.dart'
     show RendererAttributes, SeriesRendererConfig;
 import '../layout/layout_view.dart' show LayoutViewConfig, LayoutViewPaintOrder;
 import 'line_renderer.dart' show LineRenderer;
+import 'dart:ui' as ui show Color;
 
 /// Configuration for a line renderer.
 class LineRendererConfig<D> extends LayoutViewConfig
@@ -47,6 +48,9 @@ class LineRendererConfig<D> extends LayoutViewConfig
 
   /// Configures whether points representing the data will be drawn.
   final bool includePoints;
+
+  final List<ui.Color> gradientColor;
+  final List<double> colorStops;
 
   /// Configures whether an area skirt representing the data will be drawn.
   ///
@@ -82,7 +86,9 @@ class LineRendererConfig<D> extends LayoutViewConfig
       this.layoutPaintOrder = LayoutViewPaintOrder.line,
       this.areaOpacity = 0.1,
       this.roundEndCaps = false,
-      SymbolRenderer symbolRenderer})
+      SymbolRenderer symbolRenderer,
+      this.gradientColor,
+      this.colorStops})
       : this.symbolRenderer = symbolRenderer ?? LineSymbolRenderer();
 
   @override
