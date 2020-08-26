@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:ui' as ui show Gradient, Shader;
+import 'dart:ui' as ui show Gradient, Shader, Offset;
 import 'dart:math' show Point, Rectangle, max;
 import 'package:charts_common/common.dart' as common
     show
@@ -257,11 +257,14 @@ class ChartCanvas implements common.ChartCanvas {
         ));
     }
 
+
     // Draw each bar.
     for (var barIndex = 0; barIndex < barStack.segments.length; barIndex++) {
       // TODO: Add configuration for hiding stack line.
       // TODO: Don't draw stroke on bottom of bars.
       final segment = barStack.segments[barIndex];
+      var begin = 1.0 * segment.bounds.top / (segment.bounds.top + segment.bounds.height);
+      _paint.shader = ui.Gradient.linear(ui.Offset(0, 0), ui.Offset(0, (segment.bounds.top + segment.bounds.height) * 1.0), [Colors.green, Colors.yellow, Colors.red], [begin, 0.5 * (1.0 + begin), 1.0]);
       drawRect(segment.bounds,
           fill: segment.fill,
           pattern: segment.pattern,
