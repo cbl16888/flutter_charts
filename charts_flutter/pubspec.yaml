@@ -17,7 +17,7 @@ dependencies:
   charts_common:
     git:
       url: git://github.com/cbl16888/flutter_charts.git
-      ref: master
+      ref: feature/gradient_supported
       path: charts_common
   collection: ^1.14.5
   flutter:
