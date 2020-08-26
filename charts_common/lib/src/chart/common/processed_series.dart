@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:ui' as ui show Color;
 import '../../common/color.dart' show Color;
 import 'datum_details.dart' show DomainFormatter, MeasureFormatter;
 import '../../data/series.dart'
@@ -60,7 +61,8 @@ class MutableSeries<D> extends ImmutableSeries<D> {
   AccessorFn<String> labelAccessorFn;
   AccessorFn<TextStyleSpec> insideLabelStyleAccessorFn;
   AccessorFn<TextStyleSpec> outsideLabelStyleAccessorFn;
-
+  List<ui.Color> gradientColor;
+  List<double> colorStops;
   final _attrs = SeriesAttributes();
 
   Axis measureAxis;
@@ -114,6 +116,8 @@ class MutableSeries<D> extends ImmutableSeries<D> {
     strokeWidthPxFn = series.strokeWidthPxFn;
 
     _attrs.mergeFrom(series.attributes);
+    gradientColor = series.gradientColor;
+    colorStops = series.colorStops;
   }
 
   MutableSeries.clone(MutableSeries<D> other) : id = other.id {
@@ -158,6 +162,8 @@ class MutableSeries<D> extends ImmutableSeries<D> {
     _attrs.mergeFrom(other._attrs);
     measureAxis = other.measureAxis;
     domainAxis = other.domainAxis;
+    gradientColor = other.gradientColor;
+    colorStops = other.colorStops;
   }
 
   void setAttr<R>(AttributeKey<R> key, R value) {
@@ -260,6 +266,10 @@ abstract class ImmutableSeries<D> {
 
   AccessorFn<num> get strokeWidthPxFn;
 
+  List<ui.Color> gradientColor;
+  
+  List<double> colorStops;
+  
   void setAttr<R>(AttributeKey<R> key, R value);
 
   R getAttr<R>(AttributeKey<R> key);

@@ -20,6 +20,7 @@ import '../chart/common/chart_canvas.dart' show FillPatternType;
 import '../chart/common/datum_details.dart'
     show DomainFormatter, MeasureFormatter;
 import '../common/color.dart' show Color;
+import 'dart:ui' as ui show Color;
 import '../common/typed_registry.dart' show TypedRegistry, TypedKey;
 
 class Series<T, D> {
@@ -104,6 +105,8 @@ class Series<T, D> {
   // TODO: should this be immutable as well? If not, should any of
   // the non-required ones be final?
   final SeriesAttributes attributes = SeriesAttributes();
+  final List<ui.Color> gradientColor;
+  final List<double> colorStops;
 
   factory Series(
       {@required String id,
@@ -132,7 +135,9 @@ class Series<T, D> {
       bool overlaySeries = false,
       TypedAccessorFn<T, num> radiusPxFn,
       String seriesCategory,
-      TypedAccessorFn<T, num> strokeWidthPxFn}) {
+      TypedAccessorFn<T, num> strokeWidthPxFn,
+      List<ui.Color> gradientColor,
+      List<double> colorStops}) {
     // Wrap typed accessors.
     final _domainFn = (int index) => domainFn(data[index], index);
     final _measureFn = (int index) => measureFn(data[index], index);
@@ -220,6 +225,8 @@ class Series<T, D> {
       seriesCategory: seriesCategory,
       seriesColor: seriesColor,
       strokeWidthPxFn: _strokeWidthPxFn,
+      gradientColor: gradientColor,
+      colorStops: colorStops
     );
   }
 
@@ -251,6 +258,8 @@ class Series<T, D> {
     this.seriesCategory,
     this.seriesColor,
     this.strokeWidthPxFn,
+    this.gradientColor,
+    this.colorStops
   });
 
   void setAttribute<R>(AttributeKey<R> key, R value) {

@@ -15,7 +15,7 @@
 
 import 'dart:collection' show LinkedHashMap;
 import 'dart:math' show Rectangle, Point;
-import 'dart:ui' as ui show Gradient, Offset;
+import 'dart:ui' as ui show Gradient, Offset, Color;
 
 import 'package:meta/meta.dart' show required, visibleForTesting;
 
@@ -192,7 +192,9 @@ class LineRenderer<D> extends BaseCartesianRenderer<D> {
             ..domainExtent = _Range<D>(domain, domain)
             ..strokeWidthPx = strokeWidthPx
             ..styleKey = styleKey
-            ..roundEndCaps = config.roundEndCaps;
+            ..roundEndCaps = config.roundEndCaps
+            ..gradientColor = series.gradientColor
+            ..colorStops = series.colorStops;
 
           styleSegments.add(currentDetails);
           usedKeys.add(styleKey);
@@ -612,7 +614,9 @@ class LineRenderer<D> extends BaseCartesianRenderer<D> {
         ..positionExtent = positionExtent
         ..strokeWidthPx = strokeWidthPx
         ..styleKey = lineStyleKey
-        ..roundEndCaps = roundEndCaps);
+        ..roundEndCaps = roundEndCaps
+        ..gradientColor = styleSegment.gradientColor
+        ..colorStops = styleSegment.colorStops);
     }
 
     // Get the area elements we are going to set up.
@@ -985,7 +989,7 @@ class LineRenderer<D> extends BaseCartesianRenderer<D> {
                 stroke: line.color,
                 strokeWidthPx: line.strokeWidthPx,
                 roundEndCaps: line.roundEndCaps,
-                shader: config.gradientColor == null ? null : ui.Gradient.linear(ui.Offset(0, 0), ui.Offset(0, _chart.chartHeight * 1.0), config.gradientColor,config.colorStops));
+                shader: line.gradientColor == null ? null : ui.Gradient.linear(ui.Offset(0, 0), ui.Offset(0, _chart.chartHeight * 1.0), line.gradientColor,line.colorStops));
           }
         });
       }
@@ -1175,6 +1179,8 @@ class _LineRendererElement<D> {
   double strokeWidthPx;
   String styleKey;
   bool roundEndCaps;
+  List<ui.Color> gradientColor;
+  List<double> colorStops;
 
   _LineRendererElement<D> clone() {
     return _LineRendererElement<D>()
@@ -1187,7 +1193,9 @@ class _LineRendererElement<D> {
       ..positionExtent = positionExtent
       ..strokeWidthPx = strokeWidthPx
       ..styleKey = styleKey
-      ..roundEndCaps = roundEndCaps;
+      ..roundEndCaps = roundEndCaps
+      ..gradientColor = gradientColor
+      ..colorStops = colorStops;
   }
 
   void updateAnimationPercent(_LineRendererElement previous,
