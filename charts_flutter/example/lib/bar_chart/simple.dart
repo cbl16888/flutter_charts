@@ -48,16 +48,23 @@ class SimpleBarChart extends StatelessWidget {
     final random = new Random();
 
     final data = [
+      new OrdinalSales('2011', 10),
+      new OrdinalSales('2012', random.nextInt(100)),
+      new OrdinalSales('2013', random.nextInt(100)),
       new OrdinalSales('2014', random.nextInt(100)),
       new OrdinalSales('2015', random.nextInt(100)),
       new OrdinalSales('2016', random.nextInt(100)),
       new OrdinalSales('2017', random.nextInt(100)),
+      new OrdinalSales('2018', random.nextInt(100)),
+      new OrdinalSales('2019', random.nextInt(100)),
+      new OrdinalSales('2020', 100),
     ];
 
     return [
       new charts.Series<OrdinalSales, String>(
         id: 'Sales',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        fillColorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data: data,

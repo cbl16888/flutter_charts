@@ -40,7 +40,7 @@
         <entry key="charts_common">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../charts_common/lib" />
+              <option value="$USER_HOME$/flutter/.pub-cache/git/flutter_charts-6839f7fddf8790900bbe69d0c5520b96752633c8/charts_common/lib" />
             </list>
           </value>
         </entry>
@@ -222,8 +222,8 @@
       </option>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../../charts_common/lib" />
       <root url="file://$PROJECT_DIR$/../lib" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/git/flutter_charts-6839f7fddf8790900bbe69d0c5520b96752633c8/charts_common/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.flutter-io.cn/archive-2.0.13/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.flutter-io.cn/args-1.6.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.flutter-io.cn/async-2.4.1/lib" />

@@ -62,6 +62,21 @@ class SimpleTimeSeriesChart extends StatelessWidget {
       new TimeSeriesSales(new DateTime(2019, 1, 10), 0),
     ];
 
+    final data2 = [
+      new TimeSeriesSales(new DateTime(2017, 9, 19), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 26), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 10, 3), 100),
+      new TimeSeriesSales(new DateTime(2017, 10, 10), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 11, 19), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 12, 26), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2018, 1, 3), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2018, 3, 10), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2018, 5, 19), 0),
+      new TimeSeriesSales(new DateTime(2018, 8, 26), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2018, 11, 3), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2019, 1, 10), random.nextInt(100)),
+    ];
+
     return [
       new charts.Series<TimeSeriesSales, DateTime>(
         id: 'Sales',
@@ -69,6 +84,23 @@ class SimpleTimeSeriesChart extends StatelessWidget {
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
         data: data,
+        gradientColor: [
+          Color(0xFF35E03F),
+          Color(0xFFFEF201),
+          Color(0xFFFC000D)],
+        colorStops: [0.0, 0.5, 1]
+      ),
+      new charts.Series<TimeSeriesSales, DateTime>(
+          id: 'SalesData2',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          domainFn: (TimeSeriesSales sales, _) => sales.time,
+          measureFn: (TimeSeriesSales sales, _) => sales.sales,
+          data: data2,
+          gradientColor: [
+            Color(0xFF35003F),
+            Color(0xFF0EF201),
+            Color(0xFFFC00FD)],
+          colorStops: [0.0, 0.5, 1]
       )
     ];
   }
@@ -83,13 +115,6 @@ class SimpleTimeSeriesChart extends StatelessWidget {
       // should create the same type of [DateTime] as the data provided. If none
       // specified, the default creates local date time.
       dateTimeFactory: const charts.LocalDateTimeFactory(),
-      defaultRenderer: new charts.LineRendererConfig(
-        gradientColor: [
-          Color(0xFF35E03F),
-          Color(0xFFFEF201),
-          Color(0xFFFC000D)],
-        colorStops: [0.0, 0.5, 1]
-      ),
     );
   }
 
