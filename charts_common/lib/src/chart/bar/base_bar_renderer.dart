@@ -15,6 +15,7 @@
 
 import 'dart:collection' show LinkedHashMap, HashSet;
 import 'dart:math' show Point, Rectangle, max;
+import 'dart:ui' as ui show Color;
 
 import 'package:meta/meta.dart' show protected, required;
 
@@ -353,6 +354,8 @@ abstract class BaseBarRenderer<D, R extends BaseBarRendererElement,
       final previousBarGroupWeight = series.getAttr(previousBarGroupWeightKey);
       final barGroupWeight = series.getAttr(barGroupWeightKey);
       final measureAxisPosition = measureAxis.getLocation(0.0);
+      final gradientColorFn = series.gradientColorFn;
+      final colorStopsFn = series.colorStopsFn;
 
       var elementsList = series.getAttr(barElementsKey);
 
@@ -419,7 +422,10 @@ abstract class BaseBarRenderer<D, R extends BaseBarRendererElement,
                 numBarGroups: barGroupCount,
                 strokeWidthPx: details.strokeWidthPx,
                 measureIsNull: measureIsNull,
-                measureIsNegative: measureIsNegative);
+                measureIsNegative: measureIsNegative,
+                gradientColor: gradientColorFn == null ? null : gradientColorFn(barIndex),
+                colorStops: colorStopsFn == null ? null : colorStopsFn(barIndex)
+            );
 
             barStackList.add(animatingBar);
           }
@@ -464,7 +470,9 @@ abstract class BaseBarRenderer<D, R extends BaseBarRendererElement,
             numBarGroups: barGroupCount,
             strokeWidthPx: details.strokeWidthPx,
             measureIsNull: measureIsNull,
-            measureIsNegative: measureIsNegative);
+            measureIsNegative: measureIsNegative,
+            gradientColor: gradientColorFn == null ? null : gradientColorFn(barIndex),
+            colorStops: colorStopsFn == null ? null : colorStopsFn(barIndex));
 
         animatingBar.setNewTarget(barElement);
       }
@@ -505,7 +513,9 @@ abstract class BaseBarRenderer<D, R extends BaseBarRendererElement,
       FillPatternType fillPattern,
       double strokeWidthPx,
       bool measureIsNull,
-      bool measureIsNegative});
+      bool measureIsNegative,
+      List<ui.Color> gradientColor,
+      List<double> colorStops});
 
   /// Generates a [BaseBarRendererElement] to represent the rendering data for
   /// one bar on the chart.
@@ -528,7 +538,9 @@ abstract class BaseBarRenderer<D, R extends BaseBarRendererElement,
       FillPatternType fillPattern,
       double strokeWidthPx,
       bool measureIsNull,
-      bool measureIsNegative});
+      bool measureIsNegative,
+      List<ui.Color> gradientColor,
+      List<double> colorStops});
 
   @override
   void onAttach(BaseChart<D> chart) {

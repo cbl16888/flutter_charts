@@ -14,7 +14,7 @@
 // limitations under the License.
 
 import 'dart:math' show Point, Rectangle, max, min;
-
+import 'dart:ui' as ui show Color;
 import 'package:meta/meta.dart' show required;
 
 import '../../common/color.dart' show Color;
@@ -150,7 +150,9 @@ class BarTargetLineRenderer<D> extends BaseBarRenderer<D,
       int numBarGroups,
       double strokeWidthPx,
       bool measureIsNull,
-      bool measureIsNegative}) {
+      bool measureIsNegative,
+      List<ui.Color> gradientColor,
+      List<double> colorStops}) {
     return _AnimatedBarTargetLine(
         key: key, datum: datum, series: series, domainValue: domainValue)
       ..setNewTarget(makeBarRendererElement(
@@ -172,7 +174,10 @@ class BarTargetLineRenderer<D> extends BaseBarRenderer<D,
           barGroupWeight: barGroupWeight,
           numBarGroups: numBarGroups,
           measureIsNull: measureIsNull,
-          measureIsNegative: measureIsNegative));
+          measureIsNegative: measureIsNegative,
+          gradientColor: gradientColor,
+          colorStops: colorStops
+      ));
   }
 
   /// Generates a [_BarTargetLineRendererElement] to represent the rendering
@@ -197,7 +202,9 @@ class BarTargetLineRenderer<D> extends BaseBarRenderer<D,
       double barGroupWeight,
       int numBarGroups,
       bool measureIsNull,
-      bool measureIsNegative}) {
+      bool measureIsNegative,
+      List<ui.Color>gradientColor,
+      List<double>colorStops}) {
     return _BarTargetLineRendererElement()
       ..color = color
       ..dashPattern = dashPattern
@@ -208,6 +215,8 @@ class BarTargetLineRenderer<D> extends BaseBarRenderer<D,
       ..strokeWidthPx = strokeWidthPx
       ..measureIsNull = measureIsNull
       ..measureIsNegative = measureIsNegative
+      ..gradientColor = gradientColor
+      ..colorStops = colorStops
       ..points = _getTargetLinePoints(
           domainValue,
           domainAxis,

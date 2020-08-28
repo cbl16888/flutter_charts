@@ -105,6 +105,8 @@ class Series<T, D> {
   // TODO: should this be immutable as well? If not, should any of
   // the non-required ones be final?
   final SeriesAttributes attributes = SeriesAttributes();
+  final AccessorFn<List<ui.Color>> gradientColorFn;
+  final AccessorFn<List<double>> colorStopsFn;
   final List<ui.Color> gradientColor;
   final List<double> colorStops;
 
@@ -136,6 +138,8 @@ class Series<T, D> {
       TypedAccessorFn<T, num> radiusPxFn,
       String seriesCategory,
       TypedAccessorFn<T, num> strokeWidthPxFn,
+      TypedAccessorFn<T, List<ui.Color>> gradientColorFn,
+      TypedAccessorFn<T, List<double>> colorStopsFn,
       List<ui.Color> gradientColor,
       List<double> colorStops}) {
     // Wrap typed accessors.
@@ -196,6 +200,8 @@ class Series<T, D> {
         : (int index) => strokeWidthPxFn(data[index], index);
     final _keyFn =
         keyFn == null ? null : (int index) => keyFn(data[index], index);
+    final _gradientColorFn = gradientColorFn == null ? null : (int index) => gradientColorFn(data[index], index);
+    final _colorStopsFn = colorStopsFn == null ? null : (int index) => colorStopsFn(data[index], index);
 
     return Series._internal(
       id: id,
@@ -225,6 +231,8 @@ class Series<T, D> {
       seriesCategory: seriesCategory,
       seriesColor: seriesColor,
       strokeWidthPxFn: _strokeWidthPxFn,
+      gradientColorFn: _gradientColorFn,
+      colorStopsFn: _colorStopsFn,
       gradientColor: gradientColor,
       colorStops: colorStops
     );
@@ -258,6 +266,8 @@ class Series<T, D> {
     this.seriesCategory,
     this.seriesColor,
     this.strokeWidthPxFn,
+    this.gradientColorFn,
+    this.colorStopsFn,
     this.gradientColor,
     this.colorStops
   });

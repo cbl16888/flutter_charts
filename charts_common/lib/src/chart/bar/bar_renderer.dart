@@ -14,7 +14,7 @@
 // limitations under the License.
 
 import 'dart:math' show max, min, Point, Rectangle;
-
+import 'dart:ui' as ui show Color, Gradient, Shader, Offset;
 import 'package:meta/meta.dart' show protected, required;
 
 import '../../common/color.dart' show Color;
@@ -144,7 +144,9 @@ class BarRenderer<D>
       double barGroupWeight,
       int numBarGroups,
       bool measureIsNull,
-      bool measureIsNegative}) {
+      bool measureIsNegative,
+      List<ui.Color> gradientColor,
+      List<double> colorStops}) {
     return AnimatedBar<D>(
         key: key, datum: datum, series: series, domainValue: domainValue)
       ..setNewTarget(makeBarRendererElement(
@@ -166,7 +168,10 @@ class BarRenderer<D>
           barGroupWeight: barGroupWeight,
           numBarGroups: numBarGroups,
           measureIsNull: measureIsNull,
-          measureIsNegative: measureIsNegative));
+          measureIsNegative: measureIsNegative,
+          gradientColor: gradientColor,
+          colorStops: colorStops
+      ));
   }
 
   /// Generates a [BarRendererElement] to represent the rendering data for one
@@ -191,7 +196,9 @@ class BarRenderer<D>
       double barGroupWeight,
       int numBarGroups,
       bool measureIsNull,
-      bool measureIsNegative}) {
+      bool measureIsNegative,
+      List<ui.Color> gradientColor,
+      List<double> colorStops}) {
     return BarRendererElement<D>()
       ..color = color
       ..dashPattern = dashPattern
@@ -202,6 +209,8 @@ class BarRenderer<D>
       ..strokeWidthPx = strokeWidthPx
       ..measureIsNull = measureIsNull
       ..measureIsNegative = measureIsNegative
+      ..gradientColor = gradientColor
+      ..colorStops = colorStops  
       ..bounds = _getBarBounds(
           domainValue,
           domainAxis,
@@ -257,13 +266,19 @@ class BarRenderer<D>
                 bar.bounds.height,
               );
       }
-
+      ui.Shader shader;
+      if (null != bar.gradientColor && null != bar.colorStops) {
+        var begin = 1.0 * bounds.top / (bounds.top + bounds.height);
+        var colorStops = bar.colorStops.map((e) => begin + e * bounds.height / (bounds.top + bounds.height)).toList();
+       shader = ui.Gradient.linear(ui.Offset(0, 0), ui.Offset(0, (bounds.top + bounds.height) * 1.0), bar.gradientColor, colorStops);
+      }
       bars.add(CanvasRect(bounds,
           dashPattern: bar.dashPattern,
           fill: bar.fillColor,
           pattern: bar.fillPattern,
           stroke: bar.color,
-          strokeWidthPx: bar.strokeWidthPx));
+          strokeWidthPx: bar.strokeWidthPx,
+          shader: shader));
 
       maxBarWidth = max(
           maxBarWidth, (renderingVertically ? bounds.width : bounds.height));

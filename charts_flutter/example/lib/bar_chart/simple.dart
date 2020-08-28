@@ -62,13 +62,19 @@ class SimpleBarChart extends StatelessWidget {
 
     return [
       new charts.Series<OrdinalSales, String>(
-        id: 'Sales',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        fillColorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: data,
-      )
+          id: 'Sales',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          fillColorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
+          domainFn: (OrdinalSales sales, _) => sales.year,
+          measureFn: (OrdinalSales sales, _) => sales.sales,
+          gradientColorFn: (OrdinalSales sales, __) {
+            if (sales.sales < 50) {
+              return [Color(0xFFFEF201), Color(0xFFFC000D), Color(0xFF35E03F)];
+            }
+            return [Color(0xFF35E03F), Color(0xFFFEF201), Color(0xFFFC000D)];
+          },
+          colorStopsFn: (_, __) => [0.0, 0.8, 1],
+          data: data)
     ];
   }
   // EXCLUDE_FROM_GALLERY_DOCS_END
@@ -78,13 +84,6 @@ class SimpleBarChart extends StatelessWidget {
     return new charts.BarChart(
       seriesList,
       animate: animate,
-      defaultRenderer: new charts.BarRendererConfig(
-//          gradientColor: [
-//            Color(0xFF35E03F),
-//            Color(0xFFFEF201),
-//            Color(0xFFFC000D)],
-//          colorStops: [0.0, 0.5, 1]
-      ),
     );
   }
 

@@ -61,6 +61,8 @@ class MutableSeries<D> extends ImmutableSeries<D> {
   AccessorFn<String> labelAccessorFn;
   AccessorFn<TextStyleSpec> insideLabelStyleAccessorFn;
   AccessorFn<TextStyleSpec> outsideLabelStyleAccessorFn;
+  AccessorFn<List<ui.Color>> gradientColorFn;
+  AccessorFn<List<double>> colorStopsFn;
   List<ui.Color> gradientColor;
   List<double> colorStops;
   final _attrs = SeriesAttributes();
@@ -114,7 +116,8 @@ class MutableSeries<D> extends ImmutableSeries<D> {
 
     radiusPxFn = series.radiusPxFn;
     strokeWidthPxFn = series.strokeWidthPxFn;
-
+    gradientColorFn = series.gradientColorFn;
+    colorStopsFn = series.colorStopsFn;
     _attrs.mergeFrom(series.attributes);
     gradientColor = series.gradientColor;
     colorStops = series.colorStops;
@@ -158,7 +161,8 @@ class MutableSeries<D> extends ImmutableSeries<D> {
     outsideLabelStyleAccessorFn = other.outsideLabelStyleAccessorFn;
     radiusPxFn = other.radiusPxFn;
     strokeWidthPxFn = other.strokeWidthPxFn;
-
+    gradientColorFn = other.gradientColorFn;
+    colorStopsFn = other.colorStopsFn;
     _attrs.mergeFrom(other._attrs);
     measureAxis = other.measureAxis;
     domainAxis = other.domainAxis;
@@ -266,9 +270,13 @@ abstract class ImmutableSeries<D> {
 
   AccessorFn<num> get strokeWidthPxFn;
 
-  List<ui.Color> gradientColor;
+  AccessorFn<List<ui.Color>> get gradientColorFn;
+
+  AccessorFn<List<double>> get colorStopsFn;
+
+  List<ui.Color> get gradientColor;
   
-  List<double> colorStops;
+  List<double> get colorStops;
   
   void setAttr<R>(AttributeKey<R> key, R value);
 

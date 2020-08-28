@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:ui' as ui show Color, Shader;
 import '../../common/color.dart' show Color;
 import '../common/chart_canvas.dart' show getAnimatedColor, FillPatternType;
 import '../common/processed_series.dart' show ImmutableSeries;
@@ -30,6 +31,9 @@ abstract class BaseBarRendererElement {
   double strokeWidthPx;
   bool measureIsNull;
   bool measureIsNegative;
+  List<ui.Color> gradientColor;
+  List<double> colorStops;
+  ui.Shader shader;
 
   BaseBarRendererElement();
 
@@ -48,6 +52,8 @@ abstract class BaseBarRendererElement {
     strokeWidthPx = other.strokeWidthPx;
     measureIsNull = other.measureIsNull;
     measureIsNegative = other.measureIsNegative;
+    gradientColor = other.gradientColor;
+    colorStops = other.colorStops;
   }
 
   void updateAnimationPercent(BaseBarRendererElement previous,
