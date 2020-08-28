@@ -263,8 +263,6 @@ class ChartCanvas implements common.ChartCanvas {
       // TODO: Add configuration for hiding stack line.
       // TODO: Don't draw stroke on bottom of bars.
       final segment = barStack.segments[barIndex];
-      var begin = 1.0 * segment.bounds.top / (segment.bounds.top + segment.bounds.height);
-      _paint.shader = ui.Gradient.linear(ui.Offset(0, 0), ui.Offset(0, (segment.bounds.top + segment.bounds.height) * 1.0), [Colors.green, Colors.yellow, Colors.red], [begin, 0.5 * (1.0 + begin), 1.0]);
       drawRect(segment.bounds,
           fill: segment.fill,
           pattern: segment.pattern,
