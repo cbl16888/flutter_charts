@@ -84,7 +84,9 @@ class LinePainter {
         _drawDashedLine(canvas, paint, points, dashPattern);
       }
     }
-
+    if (shader != null) {
+      paint.shader = null;
+    }
     if (clipBounds != null) {
       canvas.restore();
     }
