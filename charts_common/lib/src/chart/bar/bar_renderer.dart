@@ -236,7 +236,7 @@ class BarRenderer<D>
         renderingVertically ? barElements.first : barElements.last;
 
     // Find the max bar width from each segment to calculate corner radius.
-    int maxBarWidth = 0;
+    double maxBarWidth = 0;
 
     var measureIsNegative = false;
 
@@ -247,7 +247,7 @@ class BarRenderer<D>
 
       if (bar != unmodifiedBar) {
         bounds = renderingVertically
-            ? Rectangle<int>(
+            ? Rectangle<double>(
                 bar.bounds.left,
                 max(
                     0,
@@ -256,7 +256,7 @@ class BarRenderer<D>
                 bar.bounds.width,
                 max(0, bar.bounds.height - _stackedBarPadding),
               )
-            : Rectangle<int>(
+            : Rectangle<double>(
                 max(
                     0,
                     bar.bounds.left +
@@ -309,7 +309,7 @@ class BarRenderer<D>
 
     final barStack = CanvasBarStack(
       bars,
-      radius: cornerStrategy.getRadius(maxBarWidth),
+      radius: cornerStrategy.getRadius(maxBarWidth.round()),
       stackedBarPadding: _stackedBarPadding,
       roundTopLeft: roundTopLeft,
       roundTopRight: roundTopRight,
@@ -359,7 +359,7 @@ class BarRenderer<D>
 
   /// Calculate the clipping region for a rectangle that represents the full bar
   /// stack.
-  Rectangle<int> _getBarStackBounds(Rectangle<int> barStackRect) {
+  Rectangle<int> _getBarStackBounds(Rectangle<double> barStackRect) {
     int left;
     int right;
     int top;
@@ -368,18 +368,18 @@ class BarRenderer<D>
     if (renderingVertically) {
       // Only clip at the start and end so that the bar's width stays within
       // the viewport, but any bar decorations above the bar can still show.
-      left = max(componentBounds.left, barStackRect.left);
-      right = min(componentBounds.right, barStackRect.right);
-      top = barStackRect.top;
-      bottom = barStackRect.bottom;
+      left = max(componentBounds.left, barStackRect.left.round());
+      right = min(componentBounds.right, barStackRect.right.round());
+      top = barStackRect.top.round();
+      bottom = barStackRect.bottom.round();
     } else {
       // Only clip at the top and bottom so that the bar's height stays within
       // the viewport, but any bar decorations to the right of the bar can still
       // show.
-      left = barStackRect.left;
-      right = barStackRect.right;
-      top = max(componentBounds.top, barStackRect.top);
-      bottom = min(componentBounds.bottom, barStackRect.bottom);
+      left = barStackRect.left.round();
+      right = barStackRect.right.round();
+      top = max(componentBounds.top, barStackRect.top.round());
+      bottom = min(componentBounds.bottom, barStackRect.bottom.round());
     }
 
     final width = right - left;
@@ -389,7 +389,7 @@ class BarRenderer<D>
   }
 
   /// Generates a set of bounds that describe a bar.
-  Rectangle<int> _getBarBounds(
+  Rectangle<double> _getBarBounds(
       D domainValue,
       ImmutableAxis<D> domainAxis,
       int domainWidth,
@@ -414,7 +414,7 @@ class BarRenderer<D>
     // only have one series, or are stacked, then barWidth should equal
     // domainWidth.
     int spacingLoss = (_barGroupInnerPadding * (numBarGroups - 1));
-    int barWidth = ((domainWidth - spacingLoss) * barGroupWeight).round();
+    double barWidth = ((domainWidth - spacingLoss) * barGroupWeight);
 
     // Make sure that bars are at least one pixel wide, so that they will always
     // be visible on the chart. Ideally we should do something clever with the
@@ -431,48 +431,46 @@ class BarRenderer<D>
     int previousAverageWidth = adjustedBarGroupIndex > 0
         ? ((domainWidth - spacingLoss) *
                 (previousBarGroupWeight / adjustedBarGroupIndex))
-            .round()
         : 0;
 
-    int domainStart = (domainAxis.getLocation(domainValue) -
+    double domainStart = (domainAxis.getLocation(domainValue) -
             (domainWidth / 2) +
             (previousAverageWidth + _barGroupInnerPadding) *
-                adjustedBarGroupIndex)
-        .round();
+                adjustedBarGroupIndex);
 
-    int domainEnd = domainStart + barWidth;
+    double domainEnd = domainStart + barWidth;
 
     measureValue = measureValue != null ? measureValue : 0;
 
     // Calculate measure locations. Stacked bars should have their
     // offset calculated previously.
-    int measureStart;
-    int measureEnd;
+    double measureStart;
+    double measureEnd;
     if (measureValue < 0) {
-      measureEnd = measureAxis.getLocation(measureOffsetValue).round();
+      measureEnd = measureAxis.getLocation(measureOffsetValue);
       measureStart =
-          measureAxis.getLocation(measureValue + measureOffsetValue).round();
+          measureAxis.getLocation(measureValue + measureOffsetValue);
     } else {
-      measureStart = measureAxis.getLocation(measureOffsetValue).round();
+      measureStart = measureAxis.getLocation(measureOffsetValue);
       measureEnd =
-          measureAxis.getLocation(measureValue + measureOffsetValue).round();
+          measureAxis.getLocation(measureValue + measureOffsetValue);
     }
 
-    Rectangle<int> bounds;
+    Rectangle<double> bounds;
     if (this.renderingVertically) {
       // Rectangle clamps to zero width/height
-      bounds = Rectangle<int>(domainStart, measureEnd, domainEnd - domainStart,
+      bounds = Rectangle<double>(domainStart, measureEnd, domainEnd - domainStart,
           measureStart - measureEnd);
     } else {
       // Rectangle clamps to zero width/height
-      bounds = Rectangle<int>(min(measureStart, measureEnd), domainStart,
+      bounds = Rectangle<double>(min(measureStart, measureEnd), domainStart,
           (measureEnd - measureStart).abs(), domainEnd - domainStart);
     }
     return bounds;
   }
 
   @override
-  Rectangle<int> getBoundsForBar(BarRendererElement bar) => bar.bounds;
+  Rectangle<double> getBoundsForBar(BarRendererElement bar) => bar.bounds;
 }
 
 abstract class ImmutableBarRendererElement<D> {
@@ -482,13 +480,13 @@ abstract class ImmutableBarRendererElement<D> {
 
   int get index;
 
-  Rectangle<int> get bounds;
+  Rectangle<double> get bounds;
 }
 
 class BarRendererElement<D> extends BaseBarRendererElement
     implements ImmutableBarRendererElement<D> {
   ImmutableSeries<D> series;
-  Rectangle<int> bounds;
+  Rectangle<double> bounds;
   int roundPx;
   int index;
   dynamic _datum;
@@ -530,8 +528,8 @@ class BarRendererElement<D> extends BaseBarRendererElement
     var left = ((targetBounds.left - previousBounds.left) * animationPercent) +
         previousBounds.left;
 
-    bounds = Rectangle<int>(left.round(), top.round(), (right - left).round(),
-        (bottom - top).round());
+    bounds = Rectangle<double>(left, top, (right - left),
+        (bottom - top));
 
     roundPx = localTarget.roundPx;
 
@@ -552,9 +550,9 @@ class AnimatedBar<D> extends BaseAnimatedBar<D, BarRendererElement<D>> {
     final BarRendererElement localTarget = target;
 
     // TODO: Animate out bars in the middle of a stack.
-    localTarget.bounds = Rectangle<int>(
-        localTarget.bounds.left + (localTarget.bounds.width / 2).round(),
-        localTarget.measureAxisPosition.round(),
+    localTarget.bounds = Rectangle<double>(
+        localTarget.bounds.left + (localTarget.bounds.width / 2),
+        localTarget.measureAxisPosition,
         0,
         0);
   }

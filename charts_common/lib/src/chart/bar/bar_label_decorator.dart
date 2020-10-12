@@ -166,7 +166,7 @@ class BarLabelDecorator<D> extends BarRendererDecorator<D> {
         ..textStyle = calculatedLabelPosition == BarLabelPosition.inside
             ? datumInsideLabelStyle
             : datumOutsideLabelStyle
-        ..maxWidth = bounds.width
+        ..maxWidth = bounds.width.round()
         ..textDirection = rtl ? TextDirection.rtl : TextDirection.ltr);
 
       // Total label height depends on the label element's text style.
@@ -185,7 +185,7 @@ class BarLabelDecorator<D> extends BarRendererDecorator<D> {
               measure, labelAnchor ?? _defaultVerticalLabelAnchor);
           switch (anchor) {
             case BarLabelAnchor.end:
-              labelY = bounds.top + labelPadding + offsetHeight;
+              labelY = bounds.top.round() + labelPadding + offsetHeight;
               break;
             case BarLabelAnchor.middle:
               labelY = (bounds.bottom -
@@ -195,7 +195,7 @@ class BarLabelDecorator<D> extends BarRendererDecorator<D> {
                   .round();
               break;
             case BarLabelAnchor.start:
-              labelY = bounds.bottom -
+              labelY = bounds.bottom.round() -
                   labelPadding -
                   totalLabelHeight +
                   offsetHeight;
@@ -205,10 +205,10 @@ class BarLabelDecorator<D> extends BarRendererDecorator<D> {
           // calculatedLabelPosition == LabelPosition.outside
           if (measure < 0 &&
               labelPlacement == BarLabelPlacement.opposeAxisBaseline) {
-            labelY = bounds.bottom + labelPadding + offsetHeight;
+            labelY = bounds.bottom.round() + labelPadding + offsetHeight;
           } else {
             labelY =
-                bounds.top - labelPadding - totalLabelHeight + offsetHeight;
+                bounds.top.round() - labelPadding - totalLabelHeight + offsetHeight;
           }
         }
 
@@ -288,7 +288,7 @@ class BarLabelDecorator<D> extends BarRendererDecorator<D> {
       // Set the max width and text style.
       if (calculatedLabelPosition == BarLabelPosition.inside) {
         labelElement.textStyle = datumInsideLabelStyle;
-        labelElement.maxWidth = insideBarWidth;
+        labelElement.maxWidth = insideBarWidth.round();
       } else {
         // calculatedLabelPosition == LabelPosition.outside
         labelElement.textStyle = datumOutsideLabelStyle;
@@ -326,10 +326,10 @@ class BarLabelDecorator<D> extends BarRendererDecorator<D> {
                 : (anchor == BarLabelAnchor.start);
 
             if (alignLeft) {
-              labelX = bounds.left + labelPadding;
+              labelX = bounds.left.round() + labelPadding;
               labelElement.textDirection = TextDirection.ltr;
             } else {
-              labelX = bounds.right - labelPadding;
+              labelX = bounds.right.round() - labelPadding;
               labelElement.textDirection = TextDirection.rtl;
             }
             break;
@@ -338,10 +338,10 @@ class BarLabelDecorator<D> extends BarRendererDecorator<D> {
         // calculatedLabelPosition == LabelPosition.outside
         if (measure < 0 &&
             labelPlacement == BarLabelPlacement.opposeAxisBaseline) {
-          labelX = bounds.left - labelPadding;
+          labelX = bounds.left.round() - labelPadding;
           labelElement.textDirection = TextDirection.rtl;
         } else {
-          labelX = bounds.right + labelPadding;
+          labelX = bounds.right.round() + labelPadding;
           labelElement.textDirection = TextDirection.ltr;
         }
       }

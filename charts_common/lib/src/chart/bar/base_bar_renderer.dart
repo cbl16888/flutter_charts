@@ -661,7 +661,7 @@ abstract class BaseBarRenderer<D, R extends BaseBarRendererElement,
     return nearest;
   }
 
-  Rectangle<int> getBoundsForBar(R bar);
+  Rectangle<double> getBoundsForBar(R bar);
 
   @protected
   List<BaseAnimatedBar<D, R>> _getSegmentsForDomainValue(D domainValue,
@@ -697,9 +697,9 @@ abstract class BaseBarRenderer<D, R extends BaseBarRendererElement,
         .map<DatumDetails<D>>((BaseAnimatedBar<D, R> bar) {
       final barBounds = getBoundsForBar(bar.currentBar);
       final segmentDomainDistance =
-          _getDistance(chartPoint.x.round(), barBounds.left, barBounds.right);
+          _getDistance(chartPoint.x, barBounds.left, barBounds.right);
       final segmentMeasureDistance =
-          _getDistance(chartPoint.y.round(), barBounds.top, barBounds.bottom);
+          _getDistance(chartPoint.y, barBounds.top, barBounds.bottom);
 
       final nearestPoint = Point<double>(
           clamp(chartPoint.x, barBounds.left, barBounds.right).toDouble(),
@@ -725,9 +725,9 @@ abstract class BaseBarRenderer<D, R extends BaseBarRendererElement,
         .map((BaseAnimatedBar<D, R> bar) {
       final barBounds = getBoundsForBar(bar.currentBar);
       final segmentDomainDistance =
-          _getDistance(chartPoint.y.round(), barBounds.top, barBounds.bottom);
+          _getDistance(chartPoint.y, barBounds.top, barBounds.bottom);
       final segmentMeasureDistance =
-          _getDistance(chartPoint.x.round(), barBounds.left, barBounds.right);
+          _getDistance(chartPoint.x, barBounds.left, barBounds.right);
 
       return DatumDetails<D>(
         series: bar.series,
@@ -739,7 +739,7 @@ abstract class BaseBarRenderer<D, R extends BaseBarRendererElement,
     }));
   }
 
-  double _getDistance(int point, int min, int max) {
+  double _getDistance(double point, double min, double max) {
     if (max >= point && min <= point) {
       return 0.0;
     }
