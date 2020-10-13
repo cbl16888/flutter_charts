@@ -33,23 +33,25 @@ import '../series_datum.dart' show SeriesDatum, SeriesDatumConfig;
 class SelectionModel<D> {
   var _selectedDatum = <SeriesDatum<D>>[];
   var _selectedSeries = <ImmutableSeries<D>>[];
-
+  double _domainX;
   /// Create selection model with the desired selection.
   SelectionModel(
       {List<SeriesDatum<D>> selectedData,
-      List<ImmutableSeries<D>> selectedSeries}) {
+      List<ImmutableSeries<D>> selectedSeries, double domainX}) {
     if (selectedData != null) {
       _selectedDatum = selectedData;
     }
     if (selectedSeries != null) {
       _selectedSeries = selectedSeries;
     }
+    _domainX = domainX;
   }
 
   /// Create a deep copy of the selection model.
   SelectionModel.fromOther(SelectionModel<D> other) {
     _selectedDatum = List.from(other._selectedDatum);
     _selectedSeries = List.from(other._selectedSeries);
+    _domainX = other._domainX;
   }
 
   /// Create selection model from configuration.
@@ -110,6 +112,8 @@ class SelectionModel<D> {
   /// Returns true if this [SelectionModel] has a selected series.
   bool get hasSeriesSelection => _selectedSeries.isNotEmpty;
 
+  double get domainX => _domainX;
+
   /// Returns the selected [ImmutableSeries] for this [SelectionModel].
   ///
   /// This is empty by default.
@@ -162,9 +166,7 @@ class MutableSelectionModel<D> extends SelectionModel<D> {
 
   /// Updates the selection state. If mouse driven, [datumSelection] should be
   /// ordered by distance from mouse, closest first.
-  bool updateSelection(
-      List<SeriesDatum<D>> datumSelection, List<ImmutableSeries<D>> seriesList,
-      {bool notifyListeners = true}) {
+  bool updateSelection(List<SeriesDatum<D>> datumSelection, List<ImmutableSeries<D>> seriesList, {double domainX, bool notifyListeners = true}) {
     if (_locked) return false;
 
     final origSelectedDatum = _selectedDatum;
@@ -172,6 +174,7 @@ class MutableSelectionModel<D> extends SelectionModel<D> {
 
     _selectedDatum = datumSelection;
     _selectedSeries = seriesList;
+    _domainX = domainX;
 
     // Provide a copy, so listeners get an immutable model.
     final copyOfSelectionModel = SelectionModel.fromOther(this);

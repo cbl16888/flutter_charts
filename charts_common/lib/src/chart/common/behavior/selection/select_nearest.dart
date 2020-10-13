@@ -206,7 +206,7 @@ class SelectNearest<D> implements ChartBehavior<D> {
 
     return _chart
         .getSelectionModel(selectionModelType)
-        .updateSelection(seriesDatumList, seriesList);
+        .updateSelection(seriesDatumList, seriesList, domainX: chartPoint.x);
   }
 
   bool _onDeselectAll(_, __, ___) {
