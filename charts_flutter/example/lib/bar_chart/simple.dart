@@ -48,6 +48,16 @@ class SimpleBarChart extends StatelessWidget {
     final random = new Random();
 
     final data = [
+      new OrdinalSales('2001', 10),
+      new OrdinalSales('2002', 10),
+      new OrdinalSales('2003', 10),
+      new OrdinalSales('2004', 10),
+      new OrdinalSales('2005', 10),
+      new OrdinalSales('2006', 10),
+      new OrdinalSales('2007', 10),
+      new OrdinalSales('2008', 10),
+      new OrdinalSales('2009', 10),
+      new OrdinalSales('2010', 10),
       new OrdinalSales('2011', 10),
       new OrdinalSales('2012', random.nextInt(100)),
       new OrdinalSales('2013', random.nextInt(100)),

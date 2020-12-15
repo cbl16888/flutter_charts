@@ -18,7 +18,10 @@
 import 'dart:math';
 // EXCLUDE_FROM_GALLERY_DOCS_END
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:charts_common/common.dart' as chartsCommon;
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TimeSeriesBar extends StatelessWidget {
   final List<charts.Series<TimeSeriesSales, DateTime>> seriesList;
@@ -71,6 +74,30 @@ class TimeSeriesBar extends StatelessWidget {
       new TimeSeriesSales(new DateTime(2017, 9, 21), random.nextInt(100)),
     ];
 
+    final data2 = [
+      new TimeSeriesSales(new DateTime(2017, 9, 1), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 2), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 3), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 4), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 5), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 6), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 7), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 8), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 9), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 10), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 11), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 12), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 13), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 14), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 15), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 16), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 17), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 18), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 19), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 20), random.nextInt(100)),
+      new TimeSeriesSales(new DateTime(2017, 9, 21), random.nextInt(100)),
+    ];
+
     return [
       new charts.Series<TimeSeriesSales, DateTime>(
         id: 'Sales',
@@ -78,7 +105,29 @@ class TimeSeriesBar extends StatelessWidget {
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
         data: data,
-      )
+          fillColorFn: (TimeSeriesSales model, _) => charts.Color(
+            r: 255,
+            g: 105,
+            b: 180,
+          ),
+          gradientColor: [
+            Color(0xFF35E03F),
+            Color(0xFFFEF201),
+            Color(0xFFFC000D)
+          ],
+          colorStops: [
+            0.0,
+            0.5,
+            1
+          ]
+      ),
+      new charts.Series<TimeSeriesSales, DateTime>(
+          id: "MapKeys.heartRate",
+          domainFn: (TimeSeriesSales model, _) => model.time,
+          measureFn: (TimeSeriesSales model, _) => model.sales,
+          data: data,
+          fillColorFn: (TimeSeriesSales model, _) =>
+          charts.Color.transparent)
     ];
   }
   // EXCLUDE_FROM_GALLERY_DOCS_END
@@ -90,15 +139,44 @@ class TimeSeriesBar extends StatelessWidget {
       animate: animate,
       // Set the default renderer to a bar renderer.
       // This can also be one of the custom renderers of the time series chart.
-      defaultRenderer: new charts.BarRendererConfig<DateTime>(),
+      defaultRenderer: new charts.BarRendererConfig<DateTime>(
+        cornerStrategy: charts.NoCornerStrategy(),
+        stackHorizontalSeparator: 0.0,
+        groupingType: charts.BarGroupingType.groupedStacked,
+      ),
       // It is recommended that default interactions be turned off if using bar
       // renderer, because the line point highlighter is the default for time
       // series chart.
-      defaultInteractions: false,
+      // defaultInteractions: false,
       // If default interactions were removed, optionally add select nearest
       // and the domain highlighter that are typical for bar charts.
-      behaviors: [new charts.SelectNearest(), new charts.DomainHighlighter()],
+      behaviors: [
+        new charts.LinePointHighlighter(
+            showHorizontalFollowLine:
+            charts.LinePointHighlighterFollowLineType.none,
+            showVerticalFollowLine:
+            charts.LinePointHighlighterFollowLineType.nearest),
+//        连续滑动与PanAndZoomBehavior冲突
+//        charts.SelectNearest(
+//            eventTrigger: charts.SelectionTrigger.tapAndDrag),
+        new charts.PanAndZoomBehavior(),
+      ],
+        primaryMeasureAxis: new charts.NumericAxisSpec(
+          showAxisLine: true,
+          viewport: charts.NumericExtents(0, 200),
+          tickProviderSpec: charts.BasicNumericTickProviderSpec(
+              zeroBound: true, desiredTickCount: 6),
+        ),
+        domainAxis: charts.DateTimeAxisSpec(
+            viewport: charts.DateTimeExtents(start: DateTime(2017, 9, 1), end: DateTime(2017, 9, 21)),
+            tickFormatterSpec: chartsCommon.BasicDateTimeTickFormatterSpec(
+                _domainDateFormatterSpec))
     );
+  }
+
+  static String _domainDateFormatterSpec(DateTime measure) {
+    DateFormat outputFormat = DateFormat("MM-dd");
+    return outputFormat.format(measure);
   }
 
   /// Create one series with sample hard coded data.

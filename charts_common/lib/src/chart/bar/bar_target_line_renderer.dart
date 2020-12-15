@@ -331,7 +331,7 @@ class BarTargetLineRenderer<D> extends BaseBarRenderer<D,
   }
 
   @override
-  Rectangle<double> getBoundsForBar(_BarTargetLineRendererElement bar) {
+  Rectangle<int> getBoundsForBar(_BarTargetLineRendererElement bar) {
     final points = bar.points;
     int top;
     int bottom;
@@ -343,7 +343,7 @@ class BarTargetLineRenderer<D> extends BaseBarRenderer<D,
       bottom = bottom != null ? max(bottom, p.y) : p.y;
       right = right != null ? max(right, p.x) : p.x;
     });
-    return Rectangle<double>(left.roundToDouble(), top.roundToDouble(), (right - left).roundToDouble(), (bottom - top).roundToDouble());
+    return Rectangle<int>(left, top, (right - left), (bottom - top));
   }
 }
 

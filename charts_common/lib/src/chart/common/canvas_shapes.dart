@@ -21,7 +21,7 @@ import 'chart_canvas.dart' show FillPatternType;
 
 /// A rectangle to be painted by [ChartCanvas].
 class CanvasRect {
-  final Rectangle<double> bounds;
+  final Rectangle<int> bounds;
   final List<int> dashPattern;
   final Color fill;
   final FillPatternType pattern;
@@ -47,7 +47,7 @@ class CanvasBarStack {
   final bool roundTopRight;
   final bool roundBottomLeft;
   final bool roundBottomRight;
-  final Rectangle<double> fullStackRect;
+  final Rectangle<int> fullStackRect;
 
   factory CanvasBarStack(List<CanvasRect> segments,
       {int radius,
