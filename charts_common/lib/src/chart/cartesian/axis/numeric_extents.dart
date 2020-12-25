@@ -19,6 +19,9 @@ import 'scale.dart' show Extents;
 class NumericExtents implements Extents<num> {
   final num min;
   final num max;
+  num get middle => min + ((max - min) * 0.5).round();
+  num get middleLeft => min + ((max - min) * 0.25).round();
+  num get middleRight => min + ((max - min) * 0.75).round();
 
   /// Precondition: [min] <= [max].
   // TODO: When initializer list asserts are supported everywhere,

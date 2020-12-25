@@ -83,10 +83,11 @@ class DateTimeScale extends MutableScale<DateTime> {
   DateTimeExtents get viewportDomain {
     final extents = _linearScale.viewportDomain;
     return DateTimeExtents(
-        start: dateTimeFactory
-            .createDateTimeFromMilliSecondsSinceEpoch(extents.min.toInt()),
-        end: dateTimeFactory
-            .createDateTimeFromMilliSecondsSinceEpoch(extents.max.toInt()));
+        start: dateTimeFactory.createDateTimeFromMilliSecondsSinceEpoch(extents.min.toInt()),
+        end: dateTimeFactory.createDateTimeFromMilliSecondsSinceEpoch(extents.max.toInt()),
+      extents: extents,
+      dateTimeFactory: dateTimeFactory
+    );
   }
 
   set viewportDomain(DateTimeExtents extents) {

@@ -29,6 +29,9 @@ import 'time/date_time_scale.dart' show DateTimeScale;
 
 /// Tick provider that provides ticks at the two end points of the axis range.
 class EndPointsTickProvider<D> extends BaseTickProvider<D> {
+  final bool isDay;
+  const EndPointsTickProvider({this.isDay = false});
+
   @override
   List<Tick<D>> getTicks({
     @required ChartContext context,
@@ -48,22 +51,25 @@ class EndPointsTickProvider<D> extends BaseTickProvider<D> {
     // An un-configured axis has no domain step size, and its scale defaults to
     // infinity.
     if (scale.domainStepSize.abs() != double.infinity) {
+      List<D> values;
       final start = _getStartValue(tickHint, scale);
       final end = _getEndValue(tickHint, scale);
-
-      final labels = formatter.format([start, end], formatterValueCache,
+      final middle = _getPercentValue(tickHint, scale, 0.5);
+      if (isDay) {
+        values = [start, middle, end];
+      } else {
+        final middleLeft = _getPercentValue(tickHint, scale, 0.25);
+        final middleRight = _getPercentValue(tickHint, scale, 0.75);
+        values = [start, middleLeft, middle, middleRight, end];
+      }
+      final labels = formatter.format(values, formatterValueCache,
           stepSize: scale.domainStepSize);
-
-      ticks.add(Tick(
-          value: start,
-          textElement: graphicsFactory.createTextElement(labels[0]),
-          locationPx: scale[start]));
-
-      ticks.add(Tick(
-          value: end,
-          textElement: graphicsFactory.createTextElement(labels[1]),
-          locationPx: scale[end]));
-
+      for (int i = 0; i < labels.length; i++) {
+        ticks.add(Tick(
+            value: values[i],
+            textElement: graphicsFactory.createTextElement(labels[i]),
+            locationPx: scale[values[i]]));
+      }
       // Allow draw strategy to decorate the ticks.
       tickDrawStrategy.decorateTicks(ticks);
     }
@@ -107,5 +113,26 @@ class EndPointsTickProvider<D> extends BaseTickProvider<D> {
     }
 
     return end;
+  }
+
+  /// Get the percent value from the scale.
+  D _getPercentValue(TickHint<D> tickHint, MutableScale<D> scale, double percent) {
+    Object percentValue;
+
+    if (tickHint != null) {
+      percentValue = tickHint.start;
+    } else {
+      if (scale is NumericScale) {
+        NumericScale numScale = (scale as NumericScale);
+        percentValue = percent == 0.5 ? numScale.viewportDomain.middle : (percent == 0.25 ? numScale.viewportDomain.middleLeft : numScale.viewportDomain.middleRight);
+      } else if (scale is DateTimeScale) {
+        DateTimeScale dateScale = (scale as DateTimeScale);
+        percentValue = percent == 0.5 ? dateScale.viewportDomain.middle(isDay: isDay) : (percent == 0.25 ? dateScale.viewportDomain.middleLeft(isDay: isDay) : dateScale.viewportDomain.middleRight(isDay: isDay));
+      } else if (scale is OrdinalScale) {
+        percentValue = "";
+      }
+    }
+
+    return percentValue;
   }
 }

@@ -172,13 +172,14 @@ class DayTickProviderSpec implements DateTimeTickProviderSpec {
 /// range.
 @immutable
 class DateTimeEndPointsTickProviderSpec implements DateTimeTickProviderSpec {
-  const DateTimeEndPointsTickProviderSpec();
+  final bool isDay;
+  const DateTimeEndPointsTickProviderSpec({this.isDay = false});
 
   /// Creates a [TickProviderSpec] that dynamically chooses time ticks at the
   /// two end points of the axis range
   @override
   EndPointsTickProvider<DateTime> createTickProvider(ChartContext context) {
-    return EndPointsTickProvider<DateTime>();
+    return EndPointsTickProvider<DateTime>(isDay: isDay);
   }
 
   @override
