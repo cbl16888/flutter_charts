@@ -46,7 +46,7 @@ class BarRenderer<D>
   /// The padding between bar stacks.
   ///
   /// The padding comes out of the bottom of the bar.
-  final _stackedBarPadding = 1;
+  final _stackedBarPadding = 0;
 
   final BarRendererDecorator barRendererDecorator;
 
